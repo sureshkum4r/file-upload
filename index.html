@@ -5,20 +5,92 @@
     <title>File Uploader</title>
     <style>
       body {
-        background: gray;
+        margin: 0;
+        padding: 0;
+        font-family: monospace;
       }
-      #upload_widget {
-        background: black;
+      .container {
+        margin: auto auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        max-width: 25vw;
+      }
+      .grid-container {
+        min-height: 100vh; /* min-h-screen */
+        width: 100%; /* w-full */
+        background-color: #020617; /* bg-[#020617] */
+        position: relative; /* relative */
+      }
+      .background-grid {
+        position: absolute; /* absolute */
+        top: 0; /* inset-0 */
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 0; /* z-0 */
+
+        background: #020617;
+        background-image:
+          linear-gradient(
+            to right,
+            rgba(71, 85, 105, 0.15) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(71, 85, 105, 0.15) 1px,
+            transparent 1px
+          ),
+          radial-gradient(
+            circle at 50% 60%,
+            rgba(236, 72, 153, 0.15) 0%,
+            rgba(168, 85, 247, 0.05) 40%,
+            transparent 70%
+          );
+
+        background-size:
+          40px 40px,
+          40px 40px,
+          100% 100%;
+      }
+      label {
+        font-size: 14px;
+        color: white;
+      }
+      input {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+      }
+      h2 {
+        font-size: 2rem;
+        font-style: bold;
         color: white;
         padding: 0.75rem 1rem;
+      }
+      #upload_widget {
+        background: rgb(154 88 240);
+        border-color: rgb(154 88 240);
+        font-size: 1rem;
+        font-style: bold;
+        color: white;
+        padding: 0.75rem 1rem;
+        margin-top: 4px;
         border-radius: 0.5rem;
       }
     </style>
   </head>
   <body>
-    <div>
-      <h2>Upload Your Files</h2>
-      <button id="upload_widget" class="cloudinary_button">Upload</button>
+    <div class="grid-container">
+      <div class="background-grid" />
+      <div class="container">
+        <h2>Upload Your Files</h2>
+        <label html-for="cloud-id">Cloud ID</label>
+        <input type="text" name="cloud-id" id="cloud-id" />
+        <label html-for="upload-preset">Upload Preset</label>
+        <input type="text" name="upload-preset" id="upload-preset" />
+        <button id="upload_widget" class="cloudinary_button">Upload</button>
+      </div>
     </div>
     <script
       src="https://upload-widget.cloudinary.com/latest/global/all.js"
@@ -26,22 +98,27 @@
     ></script>
 
     <script type="text/javascript">
-      var myWidget = cloudinary.createUploadWidget(
-        {
-          cloudName: "dfqcxgnmq",
-
-          uploadPreset: "file_uploads",
-        },
-        (error, result) => {
-          if (!error && result && result.event === "success") {
-            console.log("Done! Here is the image info: ", result.info);
-          }
-        },
-      );
-
       document.getElementById("upload_widget").addEventListener(
         "click",
         function () {
+          let cloudId = document.getElementById("cloud-id").value.trim();
+          let uploadPreset = document
+            .getElementById("upload-preset")
+            .value.trim();
+          console.log(cloudId, uploadPreset);
+          var myWidget = cloudinary.createUploadWidget(
+            {
+              cloudName: cloudId,
+
+              uploadPreset: uploadPreset,
+            },
+            (error, result) => {
+              if (!error && result && result.event === "success") {
+                console.log("Done! Here is the image info: ", result.info);
+              }
+            },
+          );
+
           myWidget.open();
         },
         false,
