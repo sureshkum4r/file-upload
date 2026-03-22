@@ -84,6 +84,11 @@
         margin-top: 4px;
         border-radius: 0.5rem;
       }
+      #save-btn {
+        background: rgb(223 210 240);
+        border-color: rgb(223 210 240);
+        border-radius: 0.5rem;
+      }
     </style>
   </head>
   <body>
@@ -95,6 +100,12 @@
         <input type="text" name="cloud-id" id="cloud-id" />
         <label html-for="upload-preset">Upload Preset</label>
         <input type="text" name="upload-preset" id="upload-preset" />
+        <button
+          id="save-btn"
+          title="Save this information so that you dont have to enter it again."
+        >
+          Save Data
+        </button>
         <button id="upload_widget" class="cloudinary_button">Upload</button>
         <p>How can I use it? <a href="/file-upload/guide.html">Read here</a></p>
       </div>
@@ -105,6 +116,27 @@
     ></script>
 
     <script type="text/javascript">
+      let localCloudId = window.localStorage.getItem("cloud-id");
+      let localUploadPreset = window.localStorage.getItem("upload-preset");
+      document.getElementById("cloud-id").value = localCloudId;
+      document.getElementById("upload-preset").value = localUploadPreset;
+
+      document.getElementById("save-btn").addEventListener(
+        "click",
+        function () {
+          console.log("cefd");
+          window.localStorage.setItem(
+            "cloud-id",
+            document.getElementById("cloud-id").value.trim(),
+          );
+          window.localStorage.setItem(
+            "upload-preset",
+            document.getElementById("upload-preset").value.trim(),
+          );
+        },
+        false,
+      );
+
       document.getElementById("upload_widget").addEventListener(
         "click",
         function () {
